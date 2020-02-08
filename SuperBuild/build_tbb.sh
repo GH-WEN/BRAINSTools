@@ -95,10 +95,14 @@ EOF
 
 mkdir -p "${TEST_DIR}-bld"
 pushd "${TEST_DIR}-bld"
-cmake -DCMAKE_BUILD_TYPE:STRING=Release -DTBB_DIR:PATH="${INSTALL_PREFIX}/lib/cmake/tbb"  "${TEST_DIR}"
-make
-
+cmake -DCMAKE_BUILD_TYPE:STRING=Release -DTBB_DIR:PATH=${INSTALL_PREFIX}/lib/cmake/tbb  "${TEST_DIR}"
+if [[ -f Makefile ]];then
+  make
+else
+  ninja
+fi
 ./tbb_test
+
 tbb_test_status=$?
 if [[ "${tbb_test_status}"  -eq 0 ]]; then
   echo "SUCCESSFUL TESTING"
